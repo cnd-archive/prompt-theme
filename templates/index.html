@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id="content" class="eight columns">
+  <ul id="post-list">
+  {% for article in articles_page.object_list %}
+    <li>
+      <article class="hentry row">
+        {% if loop.first and article.image %}
+        <div class="four columns">
+          <img src="/static/images/articles/{{ article.image }}" alt="{{ article.title }}" />
+        </div>
+        <div class="eight columns">
+        {% else %}
+        <div class="twelve columns">
+        {% endif %}
+          <header>
+            <h2 class="entry-title"><a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title }}">{{ article.title }}</a></h2>
+          </header>
+          <div class="post-info">
+            <abbr class="published" title="{{ article.date.isoformat() }}">{{ article.locale_date }}</abbr>
+          </div>
+          <div class="entry-content">
+            {{ article.summary|striptags() }}
+          </div>
+        </div>
+      </article>
+    </li>
+  {% endfor %}
+  </ul>
+  {% include 'pagination.html' %}
+</section>
+
+<section id="sidebar" class="four columns">
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 4,
+  interval: 30000,
+  width: 'auto',
+  height: 300,
+  theme: {
+    shell: {
+      background: '#333333',
+      color: '#ffffff'
+    },
+    tweets: {
+      background: '#000000',
+      color: '#ffffff',
+      links: '#4aed05'
+    }
+  },
+  features: {
+    scrollbar: false,
+    loop: false,
+    live: false,
+    behavior: 'all'
+  }
+}).render().setUser('{{ TWITTER_USERNAME }}').start();
+</script>
+</section>
+{% endblock content %}
